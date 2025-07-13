@@ -1,6 +1,8 @@
 package com.example.spring_playground.service;
 
+import com.example.spring_playground.domain.Grade;
 import com.example.spring_playground.domain.Member;
+import com.example.spring_playground.notification.ConsoleNotifier;
 import com.example.spring_playground.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ConsoleNotifier consoleNotifier = new ConsoleNotifier();
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -21,6 +24,7 @@ public class MemberService {
     public Long join(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
+        consoleNotifier.send(member);
         return member.getId();
     }
 

@@ -9,6 +9,17 @@
 <form action="/members/new" method="post" th:object="${member}">
     <label for="name">이름</label>
     <input type="text" id="name" th:field="*{name}" />
+    <br/>
+
+    <label for="grade">등급</label>
+    <select id="grade" th:field="*{grade}">
+        <option th:each="g : ${T(com.example.spring_playground.domain.Grade).values()}"
+                th:value="${g}"
+                th:text="${g}">
+        </option>
+    </select>
+
+    <br/>
     <button type="submit">등록</button>
 </form>
 </body>
