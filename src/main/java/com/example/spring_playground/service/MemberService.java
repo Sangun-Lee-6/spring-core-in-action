@@ -1,8 +1,7 @@
 package com.example.spring_playground.service;
 
-import com.example.spring_playground.domain.Grade;
 import com.example.spring_playground.domain.Member;
-import com.example.spring_playground.notification.ConsoleNotifier;
+import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,16 +14,20 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ConsoleNotifier consoleNotifier = new ConsoleNotifier();
+    // ✅ DIP 만족
+    private final NotificationPolicy notificationPolicy;
 
-    public MemberService(MemberRepository memberRepository) {
+
+    public MemberService(MemberRepository memberRepository, NotificationPolicy notificationPolicy) {
         this.memberRepository = memberRepository;
+        this.notificationPolicy = notificationPolicy;
     }
 
     public Long join(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
-        consoleNotifier.send(member);
+        // ✅ SRP 만족
+        notificationPolicy.notify(member);
         return member.getId();
     }
 
