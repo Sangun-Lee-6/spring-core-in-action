@@ -49,7 +49,7 @@ public class SpringConfig {
 
     @Bean
     public MemberService memberService() {
-        return new MemberService(memberRepository(), notificationPolicy(), logService());
+        return new MemberService(memberRepository(), logService());
     }
 
 }

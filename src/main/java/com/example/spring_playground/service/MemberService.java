@@ -3,6 +3,8 @@ package com.example.spring_playground.service;
 import com.example.spring_playground.domain.Grade;
 import com.example.spring_playground.domain.Member;
 import com.example.spring_playground.log.LogService;
+import com.example.spring_playground.notification.ConsoleNotificationPolicy;
+import com.example.spring_playground.notification.EmailNotificationPolicy;
 import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -16,22 +18,27 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final NotificationPolicy notificationPolicy;
-    private final LogService logService; // 스프링 빈이 같은 객체를 주입
+    private final LogService logService;
+    private NotificationPolicy notificationPolicy;
 
 
-    public MemberService(MemberRepository memberRepository, NotificationPolicy notificationPolicy, LogService logService) {
+    public MemberService(MemberRepository memberRepository, LogService logService) {
         this.memberRepository = memberRepository;
-        this.notificationPolicy = notificationPolicy;
         this.logService = logService;
     }
 
     public Long join(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
+
+        // 알림
+        if (member.getGrade() == Grade.VIP) {
+            notificationPolicy = new EmailNotificationPolicy();
+        } else{
+            notificationPolicy = new ConsoleNotificationPolicy();
+        }
         notificationPolicy.notify(member);
 
-        // 📌 VIP만 로그 기록
         if (member.getGrade() == Grade.VIP) {
             logService.log("[VIP가입] " + member.getName());
         }
