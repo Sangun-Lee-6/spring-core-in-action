@@ -1,6 +1,8 @@
 package com.example.spring_playground.service;
 
+import com.example.spring_playground.domain.Grade;
 import com.example.spring_playground.domain.Member;
+import com.example.spring_playground.log.LogService;
 import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,8 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    // ✅ DIP 만족
     private final NotificationPolicy notificationPolicy;
+    private final LogService logService = new LogService();
 
 
     public MemberService(MemberRepository memberRepository, NotificationPolicy notificationPolicy) {
@@ -26,8 +28,13 @@ public class MemberService {
     public Long join(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
-        // ✅ SRP 만족
         notificationPolicy.notify(member);
+
+        // 📌 VIP만 로그 기록
+        if (member.getGrade() == Grade.VIP) {
+            logService.log("[VIP가입] " + member.getName());
+        }
+
         return member.getId();
     }
 

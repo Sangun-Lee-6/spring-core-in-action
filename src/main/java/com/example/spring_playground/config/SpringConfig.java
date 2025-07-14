@@ -1,5 +1,8 @@
 package com.example.spring_playground.config;
 
+import com.example.spring_playground.log.InMemoryLogRepository;
+import com.example.spring_playground.log.LogRepository;
+import com.example.spring_playground.log.LogService;
 import com.example.spring_playground.notification.ConsoleNotificationPolicy;
 import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
@@ -25,7 +28,6 @@ public class SpringConfig {
 
     @Bean
     public NotificationPolicy notificationPolicy() {
-        // ✅ OCP 만족
         return new ConsoleNotificationPolicy();
     }
 
