@@ -1,5 +1,6 @@
 package com.example.spring_playground.config;
 
+import com.example.spring_playground.controller.LogController;
 import com.example.spring_playground.log.InMemoryLogRepository;
 import com.example.spring_playground.log.LogRepository;
 import com.example.spring_playground.log.LogService;
@@ -32,8 +33,23 @@ public class SpringConfig {
     }
 
     @Bean
+    public LogRepository logRepository() {
+        return new InMemoryLogRepository();
+    }
+
+    @Bean
+    public LogController logController() {
+        return new LogController(logService());
+    }
+
+    @Bean
+    public LogService logService() {
+        return new LogService(logRepository());
+    }
+
+    @Bean
     public MemberService memberService() {
-        return new MemberService(memberRepository(), notificationPolicy());
+        return new MemberService(memberRepository(), notificationPolicy(), logService());
     }
 
 }

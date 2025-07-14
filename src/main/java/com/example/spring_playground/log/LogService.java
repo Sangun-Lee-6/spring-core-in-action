@@ -3,7 +3,11 @@ package com.example.spring_playground.log;
 import java.util.List;
 
 public class LogService {
-    private final LogRepository logRepository = new InMemoryLogRepository();
+    private final LogRepository logRepository;
+
+    public LogService(LogRepository logRepository) {
+        this.logRepository = logRepository;
+    }
 
     /**
      * 로그 남기기

@@ -17,12 +17,13 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final NotificationPolicy notificationPolicy;
-    private final LogService logService = new LogService();
+    private final LogService logService; // 스프링 빈이 같은 객체를 주입
 
 
-    public MemberService(MemberRepository memberRepository, NotificationPolicy notificationPolicy) {
+    public MemberService(MemberRepository memberRepository, NotificationPolicy notificationPolicy, LogService logService) {
         this.memberRepository = memberRepository;
         this.notificationPolicy = notificationPolicy;
+        this.logService = logService;
     }
 
     public Long join(Member member) {
