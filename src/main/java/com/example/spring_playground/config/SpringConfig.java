@@ -5,6 +5,7 @@ import com.example.spring_playground.log.InMemoryLogRepository;
 import com.example.spring_playground.log.LogRepository;
 import com.example.spring_playground.log.LogService;
 import com.example.spring_playground.notification.ConsoleNotificationPolicy;
+import com.example.spring_playground.notification.NotificationDispatcher;
 import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
 import com.example.spring_playground.repository.JpaMemberRepository;
@@ -27,10 +28,11 @@ public class SpringConfig {
         return new JpaMemberRepository(em);
     }
 
-    @Bean
-    public NotificationPolicy notificationPolicy() {
-        return new ConsoleNotificationPolicy();
-    }
+    // 📌 @Component를 사용해서 빈 자동 등록
+//    @Bean
+//    public NotificationPolicy notificationPolicy() {
+//        return new ConsoleNotificationPolicy();
+//    }
 
     @Bean
     public LogRepository logRepository() {
@@ -48,8 +50,12 @@ public class SpringConfig {
     }
 
     @Bean
-    public MemberService memberService() {
-        return new MemberService(memberRepository(), logService());
+    public MemberService memberService(
+            MemberRepository memberRepository,
+            LogService logService,
+            NotificationDispatcher notificationDispatcher
+    ) {
+        return new MemberService(memberRepository, logService, notificationDispatcher);
     }
 
 }

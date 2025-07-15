@@ -2,7 +2,9 @@ package com.example.spring_playground.notification;
 
 import com.example.spring_playground.domain.Grade;
 import com.example.spring_playground.domain.Member;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConsoleNotificationPolicy implements NotificationPolicy {
     @Override
     public void notify(Member member) {

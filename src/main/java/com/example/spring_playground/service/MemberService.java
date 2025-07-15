@@ -5,6 +5,7 @@ import com.example.spring_playground.domain.Member;
 import com.example.spring_playground.log.LogService;
 import com.example.spring_playground.notification.ConsoleNotificationPolicy;
 import com.example.spring_playground.notification.EmailNotificationPolicy;
+import com.example.spring_playground.notification.NotificationDispatcher;
 import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final LogService logService;
-    private NotificationPolicy notificationPolicy;
+    //    private NotificationPolicy notificationPolicy;
+    private final NotificationDispatcher notificationDispatcher;
 
 
-    public MemberService(MemberRepository memberRepository, LogService logService) {
+    public MemberService(MemberRepository memberRepository, LogService logService, NotificationDispatcher notificationDispatcher) {
         this.memberRepository = memberRepository;
         this.logService = logService;
+        this.notificationDispatcher = notificationDispatcher;
     }
 
     public Long join(Member member) {
@@ -32,12 +35,7 @@ public class MemberService {
         memberRepository.save(member);
 
         // 알림
-        if (member.getGrade() == Grade.VIP) {
-            notificationPolicy = new EmailNotificationPolicy();
-        } else{
-            notificationPolicy = new ConsoleNotificationPolicy();
-        }
-        notificationPolicy.notify(member);
+        notificationDispatcher.dispatch(member);
 
         if (member.getGrade() == Grade.VIP) {
             logService.log("[VIP가입] " + member.getName());
