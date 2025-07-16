@@ -28,12 +28,6 @@ public class SpringConfig {
         return new JpaMemberRepository(em);
     }
 
-    // 📌 @Component를 사용해서 빈 자동 등록
-//    @Bean
-//    public NotificationPolicy notificationPolicy() {
-//        return new ConsoleNotificationPolicy();
-//    }
-
     @Bean
     public LogRepository logRepository() {
         return new InMemoryLogRepository();
