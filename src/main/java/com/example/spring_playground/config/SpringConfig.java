@@ -10,6 +10,7 @@ import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
 import com.example.spring_playground.repository.JpaMemberRepository;
 import com.example.spring_playground.service.MemberService;
+import com.example.spring_playground.service.point.PointService;
 import jakarta.persistence.EntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,9 +48,10 @@ public class SpringConfig {
     public MemberService memberService(
             MemberRepository memberRepository,
             LogService logService,
-            NotificationDispatcher notificationDispatcher
+            NotificationDispatcher notificationDispatcher,
+            PointService pointService
     ) {
-        return new MemberService(memberRepository, logService, notificationDispatcher);
+        return new MemberService(memberRepository, logService, notificationDispatcher, pointService);
     }
 
 }

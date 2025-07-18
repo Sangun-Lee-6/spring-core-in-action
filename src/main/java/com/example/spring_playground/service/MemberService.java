@@ -8,6 +8,7 @@ import com.example.spring_playground.notification.EmailNotificationPolicy;
 import com.example.spring_playground.notification.NotificationDispatcher;
 import com.example.spring_playground.notification.NotificationPolicy;
 import com.example.spring_playground.repository.MemberRepository;
+import com.example.spring_playground.service.point.PointService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +21,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final LogService logService;
-    //    private NotificationPolicy notificationPolicy;
     private final NotificationDispatcher notificationDispatcher;
+    private final PointService pointService;
 
-
-    public MemberService(MemberRepository memberRepository, LogService logService, NotificationDispatcher notificationDispatcher) {
+    public MemberService(MemberRepository memberRepository, LogService logService, NotificationDispatcher notificationDispatcher, PointService pointService) {
         this.memberRepository = memberRepository;
         this.logService = logService;
         this.notificationDispatcher = notificationDispatcher;
+        this.pointService = pointService;
     }
 
     public Long join(Member member) {
@@ -36,10 +37,12 @@ public class MemberService {
 
         // 알림
         notificationDispatcher.dispatch(member);
-
         if (member.getGrade() == Grade.VIP) {
             logService.log("[VIP가입] " + member.getName());
         }
+
+        // 포인트 적립
+        pointService.accumulatePoint(member);
 
         return member.getId();
     }
