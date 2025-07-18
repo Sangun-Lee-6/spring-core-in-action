@@ -11,6 +11,7 @@ public class Member {
     private String name;
     @Enumerated(EnumType.STRING) // enum은 문자열로 저장하는 것이 안전 (순서 변경 방지)
     private Grade grade;
+    private int point;
 
     public Long getId() { return id; }
     public String getName() { return name; }
@@ -21,6 +22,14 @@ public class Member {
     }
     public void setGrade(Grade grade) {
         this.grade = grade;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 }
 

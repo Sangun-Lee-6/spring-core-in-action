@@ -42,7 +42,8 @@ public class MemberService {
         }
 
         // 포인트 적립
-        pointService.accumulatePoint(member);
+        int point = pointService.accumulatePoint(member);
+        memberRepository.savePoint(member.getId(), point);
 
         return member.getId();
     }

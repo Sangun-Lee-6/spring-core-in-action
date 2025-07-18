@@ -7,18 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class PointService {
 
-    // 공유 상태 저장 필드
-    private int point;
+    // ❌ 문제의 원인 : 공유 상태 저장 필드
+//    private int point;
 
-    public void accumulatePoint(Member member) {
+    public int accumulatePoint(Member member) {
         if (member.getGrade() == Grade.VIP) {
-            this.point = 1000;
+            return 1000;
         } else {
-            this.point = 100;
+            return 100;
         }
-    }
-
-    public int getPoint() {
-        return this.point;
     }
 }

@@ -36,4 +36,15 @@ public class JpaMemberRepository implements MemberRepository {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
     }
+
+    @Override
+    public void savePoint(Long memberId, int point) {
+        Member member = em.find(Member.class, memberId);
+        int oldPoint = member.getPoint();
+        if (member != null) {
+            member.setPoint(member.getPoint() + point);
+        } else {
+            throw new IllegalArgumentException("존재하지 않는 회원 ID입니다: " + memberId);
+        }
+    }
 }
